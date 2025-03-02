@@ -1,0 +1,145 @@
+/* 基本样式设置 */
+body {
+    font-family: 'Microsoft YaHei', Arial, sans-serif;
+    margin: 0;
+    padding: 20px;
+    background-color: #f5f5f5;
+    color: #333;
+}
+
+h1 {
+    color: #2c3e50;
+    border-bottom: 2px solid #3498db;
+    padding-bottom: 10px;
+}
+
+ul {
+    list-style-type: none;
+    padding: 0;
+}
+
+li {
+    margin: 10px 0;
+    padding: 10px;
+    background-color: white;
+    border-radius: 4px;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+    transition: transform 0.2s ease;
+    position: relative; /* 为预览按钮定位 */
+}
+
+li:hover {
+    transform: translateX(5px);
+    box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+}
+
+a {
+    color: #3498db;
+    text-decoration: none;
+    display: block;
+    padding: 5px;
+}
+
+a:hover {
+    color: #2980b9;
+    text-decoration: underline;
+}
+
+/* 目录导航样式 */
+p a.parent-dir {
+    display: inline-block;
+    margin-bottom: 10px;
+    padding: 5px 10px;
+    background-color: #eee;
+    border-radius: 3px;
+}
+
+/* 不同文件类型的图标 */
+a.dir-link::before {
+    content: '📁 ';
+}
+
+a.file-link::before {
+    content: '📄 ';
+}
+
+/* 音乐文件特殊样式 */
+a.music-file::before {
+    content: '🎵 ';
+}
+
+/* 歌词文件特殊样式 */
+a.lyrics-file::before {
+    content: '📝 ';
+}
+
+/* 音乐预览按钮 */
+.preview-btn {
+    position: absolute;
+    right: 10px;
+    top: 50%;
+    transform: translateY(-50%);
+    background: #3498db;
+    color: white;
+    border: none;
+    border-radius: 50%;
+    width: 24px;
+    height: 24px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 12px;
+}
+
+.preview-btn:hover {
+    background: #2980b9;
+}
+
+/* 音乐预览播放器 */
+.music-preview {
+    width: 100%;
+    margin-top: 10px;
+}
+
+/* 歌词显示 */
+.lyrics-display {
+    margin-top: 15px;
+    padding: 15px;
+    background-color: white;
+    border-radius: 4px;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+}
+
+.lyrics-display h3 {
+    margin-top: 0;
+    color: #2c3e50;
+    border-bottom: 1px solid #eee;
+    padding-bottom: 5px;
+}
+
+.lyrics-text {
+    max-height: 300px;
+    overflow-y: auto;
+    padding-right: 10px;
+}
+
+.lyrics-text p {
+    margin: 5px 0;
+    line-height: 1.5;
+}
+
+/* 响应式布局 */
+@media (max-width: 768px) {
+    body {
+        padding: 10px;
+    }
+    
+    li {
+        padding: 8px;
+    }
+    
+    .lyrics-text {
+        max-height: 200px;
+    }
+}
