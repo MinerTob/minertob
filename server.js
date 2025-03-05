@@ -81,52 +81,32 @@ app.use('/assets/:folder', (req, res, next) => {
 app.get('/download/:folder/:filename', (req, res) => {
   const { folder, filename } = req.params;
   
-  // 安全检查：确保只能访问music和lyrics文件夹
   if (folder !== 'music' && folder !== 'lyrics') {
     return res.status(403).send('访问被拒绝');
   }
   
   const filePath = path.join(__dirname, 'assets', folder, filename);
   
-  // 检查文件是否存在
-  fs.access(filePath, fs.constants.F_OK, (err) => {
+  fs.readFile(filePath, (err, data) => {
     if (err) {
-      return res.status(404).send('文件不存在');
+      console.error('文件读取错误:', err);
+      return res.status(404).send('文件不存在或无法读取');
     }
+
+    const ext = path.extname(filename).toLowerCase();
+    let contentType = 'application/octet-stream';
     
-    // 获取文件信息
-    fs.stat(filePath, (err, stats) => {
-      if (err) {
-        return res.status(500).send('无法获取文件信息');
-      }
-      
-      // 设置正确的Content-Type
-      const ext = path.extname(filename).toLowerCase();
-      let contentType = 'application/octet-stream'; // 默认二进制流
-      
-      if (ext === '.mp3') contentType = 'audio/mpeg';
-      else if (ext === '.flac') contentType = 'audio/flac';
-      else if (ext === '.wav') contentType = 'audio/wav';
-      else if (ext === '.ogg') contentType = 'audio/ogg';
-      else if (ext === '.lrc') contentType = 'text/plain';
-      
-      // 设置响应头
-      res.setHeader('Content-Type', contentType);
-      res.setHeader('Content-Length', stats.size);
-      res.setHeader('Content-Disposition', `attachment; filename="${encodeURIComponent(filename)}"`);
-      
-      // 创建文件读取流并直接传输到响应
-      const fileStream = fs.createReadStream(filePath);
-      fileStream.pipe(res);
-      
-      // 处理错误
-      fileStream.on('error', (error) => {
-        console.error('文件流错误:', error);
-        if (!res.headersSent) {
-          res.status(500).send('文件传输错误');
-        }
-      });
-    });
+    if (ext === '.mp3') contentType = 'audio/mpeg';
+    else if (ext === '.flac') contentType = 'audio/flac';
+    else if (ext === '.wav') contentType = 'audio/wav';
+    else if (ext === '.ogg') contentType = 'audio/ogg';
+    else if (ext === '.lrc') contentType = 'text/plain';
+    
+    res.setHeader('Content-Type', contentType);
+    res.setHeader('Content-Length', data.length);
+    res.setHeader('Content-Disposition', `attachment; filename="${encodeURIComponent(filename)}"`);
+    
+    res.send(data);
   });
 });
 
